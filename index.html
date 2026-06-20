@@ -128,6 +128,13 @@
   /* BG ACCENTS */
   .bg-sand { background: var(--sand); }
 
+  /* HAMBURGER */
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .nav-hamburger span { width: 24px; height: 2px; background: var(--rose-deep); border-radius: 2px; transition: all 0.3s; display: block; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
   /* DROPDOWN */
   .nav-dropdown { position: relative; }
   .nav-dropdown:hover .dropdown-menu,
@@ -136,6 +143,47 @@
   .dropdown-menu a { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; text-decoration: none; font-size: 14px; color: var(--text); transition: background 0.15s; }
   .dropdown-menu a:hover { background: #FDE8EF; color: var(--rose-deep); }
   .dropdown-menu a img { width: 20px; height: 20px; object-fit: contain; border-radius: 4px; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .nav-hamburger { display: flex; }
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--white); border-bottom: 0.5px solid var(--border); padding: 12px 5% 20px; gap: 0; z-index: 99; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+    .nav-links.open { display: flex; }
+    .nav-links > a { padding: 13px 0; border-bottom: 0.5px solid var(--border); font-size: 15px; color: var(--text); }
+    .nav-cta { background: none !important; color: var(--rose-deep) !important; padding: 13px 0 !important; border-radius: 0 !important; font-size: 15px !important; }
+    .nav-dropdown { width: 100%; }
+    .nav-dropdown .nav-cta { display: flex; justify-content: space-between; }
+    .dropdown-menu { position: static; opacity: 1; pointer-events: auto; transform: none; box-shadow: none; border: none; border-radius: 0; padding: 4px 0 4px 16px; display: none; }
+    .dropdown-menu.open { display: block; }
+
+    .hero { flex-direction: column; padding: 40px 5%; gap: 32px; }
+    .hero-visual { flex: none; width: 100%; }
+
+    section { padding: 48px 5%; }
+    .section-title { font-size: 24px; }
+
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .categories-grid { grid-template-columns: 1fr 1fr 1fr; }
+
+    .trust-bar { gap: 16px; padding: 14px 5%; }
+
+    .newsletter { padding: 36px 24px; margin: 0 4% 48px; }
+    .newsletter h2 { font-size: 24px; }
+    .newsletter-form { flex-direction: column; }
+    .newsletter-form button { width: 100%; }
+
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .footer-brand { grid-column: span 2; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .categories-grid { grid-template-columns: 1fr 1fr; }
+    .hero-title { font-size: 30px; }
+    .hero-sub { font-size: 15px; }
+    .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+  }
 </style>
 </head>
 <body>
@@ -143,7 +191,10 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo">RoseGlow<span>Guides</span></div>
-  <div class="nav-links">
+  <button type="button" class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <a href="https://www.sephora.com/beauty/best-selling-skin-care?icid2=rwd%20soft%20link_bestseller%20skincare_8112021" target="_blank" rel="nofollow sponsored noopener">Skincare</a>
     <a href="https://www.charlottetilbury.com/us/products/makeup/cheek" target="_blank" rel="nofollow sponsored noopener">Makeup</a>
     <a href="https://theordinary.com/en-us/category/body-hair" target="_blank" rel="nofollow sponsored noopener">Hair</a>
@@ -383,6 +434,24 @@
 </footer>
 
 <script>
+// Hamburger menu toggle
+var hamburger = document.getElementById('hamburger');
+var navLinks = document.getElementById('nav-links');
+hamburger.addEventListener('click', function() {
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+
+// Mobile: Shop Deals dropdown toggle on click
+var shopDealsBtn = document.querySelector('.nav-dropdown .nav-cta');
+var dropdownMenu = document.querySelector('.dropdown-menu');
+shopDealsBtn.addEventListener('click', function(e) {
+  if (window.innerWidth <= 768) {
+    e.preventDefault();
+    dropdownMenu.classList.toggle('open');
+  }
+});
+
 function subscribeNewsletter() {
   var email = document.getElementById('newsletter-email').value.trim();
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
